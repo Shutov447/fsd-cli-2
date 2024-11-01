@@ -2,7 +2,7 @@ import { writeFileSync } from 'fs';
 import { Extension } from './standard';
 
 let globalExtension: Extension = 'ts';
-let globalContent = '';
+let globalContent = "export * from '';";
 
 export const setIndexExtension = (ext: Extension) => {
     globalExtension = ext;

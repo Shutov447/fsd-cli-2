@@ -2,17 +2,13 @@
 'use strict';
 
 import { Command } from 'commander';
-import { fsd2Config, layers, segments } from './standard';
+import { fsd2Config, layersForDescription, segments } from './standard';
 import { createLayer } from './create-layer';
 import { createSlice } from './create-slice';
-import { createSegment } from './create-segment';
-import { setIndexContent, setIndexExtension } from './create-index';
-import { updateIndexExport } from './update-index-export';
+import { createSegments } from './create-segment';
+import { setIndexExtension } from './create-index';
 import { updateUi } from './update-ui';
 
-const layersForDescription = layers.reduce((prevV, curV, i) =>
-    i === 0 ? curV : `${prevV} | ${curV}`
-);
 const segmentsForDescription = segments.toString().replace(/,/g, ', ');
 
 const program = new Command();
@@ -37,28 +33,21 @@ program
         const project = fsd2Config.projects.find((p) => p.alias === alias);
 
         if (project) {
-            setIndexContent("export * from '';");
+            const segments = options.segments;
             const ext =
                 options.extension && ['ts', 'js'].includes(options.extension)
                     ? options.extension
                     : project.extension;
+
             setIndexExtension(ext);
 
             const { path, uiPreset } = project;
             const createdLayer = createLayer(path, layer);
             const createdSlice = createSlice(createdLayer, slice);
 
-            if (options.segments) {
-                (options.segments as string[]).forEach((segment) => {
-                    createSegment(createdSlice, segment);
-                });
-                updateIndexExport(createdSlice);
-            }
-
+            segments && createSegments(createdSlice, segments);
             uiPreset && updateUi(createdSlice, uiPreset);
-        } else {
-            console.error(`Project with alias "${alias}" not found.`);
-        }
+        } else console.error(`Project with alias "${alias}" not found.`);
     });
 
 program.parse(process.argv);

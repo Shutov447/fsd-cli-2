@@ -1,5 +1,5 @@
 import { existsSync, mkdirSync } from 'fs';
-import { layers } from './standard';
+import { layers, layersForDescription } from './standard';
 import { join } from 'path';
 import { createIndex } from './create-index';
 
@@ -8,13 +8,24 @@ export const createLayer = (
     layerName: string,
     withIndex = false
 ): string => {
-    const createdPath = join(pathToProject, layerName);
+    const formattedLayerName = layers.find(
+        (layer) => layer.name === layerName || layer.aliases.includes(layerName)
+    )?.name;
+    let createdPath = '';
 
     try {
-        if (!layers.includes(layerName))
+        if (
+            !layers.find(
+                (layer) =>
+                    layer.name === layerName ||
+                    layer.aliases.includes(layerName)
+            )
+        )
             throw new Error(
-                `Layer ${layerName} is not allowed. Use one of them: ${layers}`
+                `Layer ${layerName} is not allowed. Use one of them: ${layersForDescription}`
             );
+
+        createdPath = join(pathToProject, formattedLayerName!);
 
         if (!existsSync(createdPath)) {
             mkdirSync(createdPath);

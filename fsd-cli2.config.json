@@ -13,6 +13,6 @@
             "extension": "js"
         }
     ],
-    "customLayers": ["example-layer"],
+    "customLayers": [{ "name": "example-layer", "aliases": ["el"] }],
     "customSegments": ["example-segment"]
 }

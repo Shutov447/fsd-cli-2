@@ -2,6 +2,7 @@ import { existsSync, mkdirSync } from 'fs';
 import { join } from 'path';
 import { createIndex } from './create-index';
 import { segments } from './standard';
+import { updateIndexExport } from './update-index-export';
 
 export const createSegment = (
     pathToSlice: string,
@@ -26,4 +27,11 @@ export const createSegment = (
     }
 
     return createdPath;
+};
+
+export const createSegments = (pathSlice: string, segments: string[]) => {
+    (segments as string[]).forEach((segment) => {
+        createSegment(pathSlice, segment);
+    });
+    updateIndexExport(pathSlice);
 };
