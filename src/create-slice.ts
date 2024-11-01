@@ -13,8 +13,7 @@ export const createSlice = (
         if (!existsSync(createdPath)) {
             mkdirSync(createdPath);
             withIndex && createIndex(createdPath);
-            console.log('slice created');
-        } else console.log('slice already exists');
+        }
     } catch (err) {
         console.error(`Error creating slice: ${err}`);
     }

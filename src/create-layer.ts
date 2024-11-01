@@ -8,19 +8,14 @@ export const createLayer = (
     layerName: string,
     withIndex = false
 ): string => {
-    const formattedLayerName = layers.find(
+    const newLayerName = layers.find(
         (layer) => layer.name === layerName || layer.aliases.includes(layerName)
-    )?.name;
+    );
+    const formattedLayerName = newLayerName?.name;
     let createdPath = '';
 
     try {
-        if (
-            !layers.find(
-                (layer) =>
-                    layer.name === layerName ||
-                    layer.aliases.includes(layerName)
-            )
-        )
+        if (!newLayerName)
             throw new Error(
                 `Layer ${layerName} is not allowed. Use one of them: ${layersForDescription}`
             );
@@ -30,8 +25,7 @@ export const createLayer = (
         if (!existsSync(createdPath)) {
             mkdirSync(createdPath);
             withIndex && createIndex(createdPath);
-            console.log('layer created');
-        } else console.log('layer already exists');
+        }
     } catch (error) {
         console.error('Error creating layer', error);
     }

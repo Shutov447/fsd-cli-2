@@ -37,7 +37,7 @@ const generateAngularComponent = (component: string, path: string) => {
                 return;
             }
             updateIndexExport(path, ['.css', '.html', '.spec']);
-            console.log(`Result: ${stdout}`);
+            console.log(stdout);
         }
     );
 };

@@ -25,7 +25,6 @@ export const createIndex = (
         const path = `${pathToDir}/index.${extension || globalExtension}`;
 
         writeFileSync(path, content || globalContent);
-        console.log(`Index file created at ${path}`);
     } catch (err) {
         console.error(err);
     }

@@ -20,8 +20,7 @@ export const createSegment = (
         if (!existsSync(createdPath)) {
             mkdirSync(createdPath);
             withIndex && createIndex(createdPath);
-            console.log('segment created');
-        } else console.log('segment already exists');
+        }
     } catch (err) {
         console.error(`Error creating segment: ${err}`);
     }
