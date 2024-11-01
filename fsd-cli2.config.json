@@ -1,0 +1,18 @@
+{
+    "defaultProjectAlias": "tp",
+    "projects": [
+        {
+            "path": "test-project/src",
+            "alias": "tp",
+            "extension": "ts",
+            "uiPreset": "angular"
+        },
+        {
+            "path": "some/new-project",
+            "alias": "np",
+            "extension": "js"
+        }
+    ],
+    "customLayers": ["example-layer"],
+    "customSegments": ["example-segment"]
+}

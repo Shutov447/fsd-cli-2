@@ -1,0 +1,25 @@
+{
+    "version": "1.0.0",
+    "main": "./dist/index.js",
+    "scripts": {},
+    "type": "commonjs",
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "description": "cli for create feature-sliced design structures (folders and files)",
+    "name": "fsd-cli-2",
+    "preferGlobal": true,
+    "bin": {
+        "fsd2": "dist/index.js"
+    },
+    "devDependencies": {
+        "@angular-devkit/schematics-cli": "^18.2.11",
+        "@angular/cli": "^18.2.11",
+        "@tsconfig/recommended": "^1.0.8",
+        "@types/node": "^22.8.4",
+        "typescript": "^5.6.3"
+    },
+    "dependencies": {
+        "commander": "^12.1.0"
+    }
+}
