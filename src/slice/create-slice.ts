@@ -1,6 +1,6 @@
 import { existsSync, mkdirSync } from 'fs';
 import { join } from 'path';
-import { createIndex } from './create-index';
+import { createIndex } from '../index/create-index';
 
 export const createSlice = (
     pathToLayer: string,

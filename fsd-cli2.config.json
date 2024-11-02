@@ -14,5 +14,6 @@
         }
     ],
     "customLayers": [{ "name": "example-layer", "aliases": ["el"] }],
-    "customSegments": ["example-segment"]
+    "customSegments": ["example-segment"],
+    "customSharedSegments": ["css"]
 }

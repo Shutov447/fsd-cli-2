@@ -1,7 +1,7 @@
 import { existsSync, mkdirSync } from 'fs';
-import { layers, layersForDescription } from './standard';
+import { layers, layersForDescription } from '../standard';
 import { join } from 'path';
-import { createIndex } from './create-index';
+import { createIndex } from '../index/create-index';
 
 export const createLayer = (
     pathToProject: string,

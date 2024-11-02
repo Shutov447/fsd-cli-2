@@ -3,10 +3,10 @@ import {
     Extension,
     indexExtensions,
     indexExtensionsForDescription,
-} from './standard';
+} from '../standard';
 
 let globalExtension: Extension = 'ts';
-let globalContent = "export * from '';";
+let globalContent = "export * from './';";
 
 export const setIndexExtension = (ext: Extension) => {
     globalExtension = ext;
@@ -27,7 +27,6 @@ export const createIndex = (
             );
 
         const path = `${pathToDir}/index.${extension || globalExtension}`;
-
         writeFileSync(path, content || globalContent);
     } catch (err) {
         console.error(err);

@@ -1,16 +1,11 @@
 import { readFileSync } from 'node:fs';
 
 export type Extension = 'ts' | 'js';
-export const indexExtensions: readonly Extension[] = ['ts', 'js'];
-export const indexExtensionsForDescription = indexExtensions.reduce(
-    (acc, ext, i) => (i === 0 ? ext : `${acc} | ${ext}`),
-    ''
-);
-
 export interface ILayer {
     name: string;
     aliases: string[];
 }
+export interface AngularEntity extends ILayer {}
 export type UiPreset = 'angular' | 'react' | 'vue'; // INFO: Only Angular support yet
 export interface IFSD2 {
     defaultProjectAlias: string;
@@ -22,13 +17,23 @@ export interface IFSD2 {
     }[];
     customLayers?: readonly ILayer[];
     customSegments?: readonly string[];
+    customSharedSegments?: readonly string[];
 }
 
+export const ngComponentEntity = ['component', 'c'];
+export const allNgEntities = [...ngComponentEntity];
+
+export const indexExtensions: readonly Extension[] = ['ts', 'js'];
 export const fsd2ConfigFileName = 'fsd-cli2.config.json';
 export const fsd2Config: IFSD2 = JSON.parse(
     readFileSync(fsd2ConfigFileName).toString()
 );
+
 export const standardLayers: readonly ILayer[] = [
+    {
+        name: 'app',
+        aliases: [],
+    },
     {
         name: 'pages',
         aliases: ['p'],
@@ -45,10 +50,11 @@ export const standardLayers: readonly ILayer[] = [
         name: 'entities',
         aliases: ['e'],
     },
+    {
+        name: 'shared',
+        aliases: ['sh'],
+    },
 ];
-// const appLayer = ['app'];
-// const sharedLayer = ['shared', 'sh'];
-
 export const standardSegments: readonly string[] = ['ui', 'api', 'lib'];
 
 export const layers: readonly ILayer[] = [
@@ -59,6 +65,10 @@ export const segments: readonly string[] = [
     ...standardSegments,
     ...(fsd2Config?.customSegments || []),
 ];
+export const sharedSegments = [
+    ...segments,
+    ...(fsd2Config?.customSegments || []),
+];
 
 export const layersForDescription = layers.reduce(
     (prevV, curV, i) =>
@@ -67,3 +77,15 @@ export const layersForDescription = layers.reduce(
             : `${prevV} | ${curV.name}[${curV.aliases}]`,
     ''
 );
+export const angularEntitiesForDescription = allNgEntities.reduce(
+    (acc, entity, i) => (i === 0 ? entity : `${acc} | ${entity}`),
+    ''
+);
+export const indexExtensionsForDescription = indexExtensions.reduce(
+    (acc, ext, i) => (i === 0 ? ext : `${acc} | ${ext}`),
+    ''
+);
+export const sharedSegmentsForDescription = [
+    ...segments,
+    ...(fsd2Config.customSharedSegments || []),
+].reduce((acc, curS, i) => (i === 0 ? curS : `${acc} | ${curS}`), '');

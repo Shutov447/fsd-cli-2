@@ -8,7 +8,7 @@ npm i -D fsd-cli-2
 
 ### How to use:
 
-1. Create `fsd-cli2.config.json` in root directory (necessarily in the same directory as `angular.json` if `UiPreset: angular`). For example:
+### 1. Create `fsd-cli2.config.json` in root directory (necessarily in the same directory as `angular.json` if `UiPreset: angular`). For example:
 
 ```json
 {
@@ -40,7 +40,7 @@ npm i -D fsd-cli-2
     \---src
 ```
 
-2.  Command.
+### 2. Command.
 
 full:
 
@@ -83,3 +83,12 @@ generated structure:
 ```
 
 and automatically updates the re-exports in the indexes.
+
+### 3. Special command to create segments in the shared layer:
+
+```
+fsd2 shared|sh ui component|c button
+```
+
+Creates a ui segment in the shared layer, and button in the component without --flat.
+Only autogenerate components in the ui segment yet.

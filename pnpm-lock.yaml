@@ -7,10 +7,6 @@ settings:
 importers:
 
   .:
-    dependencies:
-      commander:
-        specifier: ^12.1.0
-        version: 12.1.0
     devDependencies:
       '@angular-devkit/schematics-cli':
         specifier: ^18.2.11
@@ -24,6 +20,9 @@ importers:
       '@types/node':
         specifier: ^22.8.4
         version: 22.8.4
+      commander:
+        specifier: ^12.1.0
+        version: 12.1.0
       typescript:
         specifier: ^5.6.3
         version: 5.6.3

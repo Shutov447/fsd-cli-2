@@ -1,8 +1,8 @@
 import { existsSync, mkdirSync } from 'fs';
 import { join } from 'path';
-import { createIndex } from './create-index';
-import { segments } from './standard';
-import { updateIndexExport } from './update-index-export';
+import { createIndex } from '../index/create-index';
+import { segments } from '../standard';
+import { updateIndexExport } from '../index/update-index-export';
 
 export const createSegment = (
     pathToSlice: string,
