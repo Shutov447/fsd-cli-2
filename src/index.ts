@@ -2,12 +2,18 @@
 'use strict';
 
 import { Command } from 'commander';
-import { fsd2Config, layersForDescription, segments } from './standard';
+import {
+    fsd2Config,
+    indexExtensions,
+    indexExtensionsForDescription,
+    layersForDescription,
+    segments,
+} from './standard';
 import { createLayer } from './create-layer';
 import { createSlice } from './create-slice';
 import { createSegments } from './create-segment';
 import { setIndexExtension } from './create-index';
-import { updateUi } from './update-ui';
+import { updateUiSegment } from './update-ui';
 
 const segmentsForDescription = segments.toString().replace(/,/g, ', ');
 
@@ -23,7 +29,10 @@ program
         'project where the files will be created',
         fsd2Config.defaultProjectAlias
     )
-    .option('-ext --extension [EXTENSION]', `extension of index file: ts | js`)
+    .option(
+        '-ext --extension [EXTENSION]',
+        `extension of index file: ${indexExtensionsForDescription}`
+    )
     .option(
         '-s --segments [SEGMENTS...]',
         `create segments with names: ${segmentsForDescription}`
@@ -35,7 +44,7 @@ program
         if (project) {
             const segments = options.segments;
             const ext =
-                options.extension && ['ts', 'js'].includes(options.extension)
+                options.extension && indexExtensions.includes(options.extension)
                     ? options.extension
                     : project.extension;
 
@@ -46,7 +55,7 @@ program
             const createdSlice = createSlice(createdLayer, slice);
 
             segments && createSegments(createdSlice, segments);
-            uiPreset && updateUi(createdSlice, uiPreset);
+            uiPreset && updateUiSegment(createdSlice, uiPreset);
         } else console.error(`Project with alias "${alias}" not found.`);
     });
 

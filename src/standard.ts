@@ -1,6 +1,12 @@
 import { readFileSync } from 'node:fs';
 
 export type Extension = 'ts' | 'js';
+export const indexExtensions: readonly Extension[] = ['ts', 'js'];
+export const indexExtensionsForDescription = indexExtensions.reduce(
+    (acc, ext, i) => (i === 0 ? ext : `${acc} | ${ext}`),
+    ''
+);
+
 export interface ILayer {
     name: string;
     aliases: string[];
@@ -49,8 +55,7 @@ export const standardLayers: readonly ILayer[] = [
     },
 ];
 // export const standardLayers: readonly string[] = [
-//     // TODO: сделать алиасы к слоям: e, f, sh и тд
-//     'app', // TODO: сделать исключение, что там могут быть только core и конфиг папки (в самом конфиге можно указать кастомные папки)
+//     'app', // TODO: сделать исключение, что там могут быть только core и конфиг папки (в fsd-cli2.config.json можно указать кастомные папки)
 //     'pages',
 //     'widgets',
 //     'features',

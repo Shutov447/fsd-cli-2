@@ -1,5 +1,9 @@
 import { writeFileSync } from 'fs';
-import { Extension } from './standard';
+import {
+    Extension,
+    indexExtensions,
+    indexExtensionsForDescription,
+} from './standard';
 
 let globalExtension: Extension = 'ts';
 let globalContent = "export * from '';";
@@ -17,9 +21,9 @@ export const createIndex = (
     content?: string
 ) => {
     try {
-        if (extension && !['ts', 'js'].includes(extension))
+        if (extension && !indexExtensions.includes(extension))
             throw new Error(
-                `Invalid extension: ${extension}, but must be 'ts' | 'js'`
+                `Invalid extension: ${extension}, but must be: ${indexExtensionsForDescription}`
             );
 
         const path = `${pathToDir}/index.${extension || globalExtension}`;

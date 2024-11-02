@@ -4,7 +4,7 @@ import { join } from 'path';
 import { readdirSync } from 'fs';
 import { updateIndexExport } from './update-index-export';
 
-export const updateUi = (
+export const updateUiSegment = (
     pathWithUi: string,
     uiPreset: UiPreset
 ): string | null => {
@@ -28,16 +28,12 @@ const generateAngularComponent = (component: string, path: string) => {
     exec(
         `ng g c ${component} --path=${path} --flat`,
         (error, stdout, stderr) => {
-            if (error) {
-                console.error(`Error: ${error.message}`);
-                return;
+            if (error) console.error(`Error: ${error.message}`);
+            else if (stderr) console.error(`Error: ${stderr}`);
+            else {
+                updateIndexExport(path, ['.css', '.html', '.spec']);
+                console.log(stdout);
             }
-            if (stderr) {
-                console.error(`Error: ${stderr}`);
-                return;
-            }
-            updateIndexExport(path, ['.css', '.html', '.spec']);
-            console.log(stdout);
         }
     );
 };
