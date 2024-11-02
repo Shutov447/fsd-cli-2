@@ -28,7 +28,8 @@ npm i -D fsd-cli-2
     ],
     // fsd2 --help for more info: default layers, slice, segments etc.
     "customLayers": [{ "name": "example-layer", "aliases": ["el"] }], // optional
-    "customSegments": ["example-segment"] // optional
+    "customSegments": ["example-segment"], // optional
+    "customSharedSegments": ["css"] // optional
 }
 ```
 
@@ -90,5 +91,21 @@ and automatically updates the re-exports in the indexes.
 fsd2 shared|sh ui component|c button
 ```
 
-Creates a ui segment in the shared layer, and button in the component without --flat.
+generated structure:
+
+```
+\---src
+    \---shared
+        \---ui
+            |   index.ts
+            |
+            \---button
+                    button.component.css
+                    button.component.html
+                    button.component.spec.ts
+                    button.component.ts
+                    index.ts
+```
+
+Creates ui segment in the shared layer, and button in the component without --flat.
 Only autogenerate components in the ui segment yet.
