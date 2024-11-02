@@ -26,8 +26,6 @@ export const updateIndexExport = (
         .map((file) => `export * from './${file}';\n`)
         .reduce((acc, file) => acc + file);
 
-    console.log('filesForExport', filesForExport);
-    console.log('content', content);
     if (!index) {
         console.error('No index file found in the dir:', pathWithIndex);
         return;
