@@ -21,11 +21,21 @@ const program = new Command();
 
 program.name('fsd2').version('1.0.0').description('fsd files creator.');
 
+// TODO: наверное займусь этим когда из армии вернусь(0(
+// INFO: https://www.npmjs.com/package/commander/v/5.1.0
+// program.command('app').action(() => {
+//     console.log('in app'); app/core/myComponent, shared/config/[allConfigs...] etc
+// });
+
+// program.command('sh <target>').action((segment) => {
+//     console.log('in shared');
+// }); // короче то же самое, но только надо обрабатывать с сегментами: shared/ui/myComponent, shared/api/meService etc.
+
 program
     .argument('<layer>', `create layer with name: ${layersForDescription}`)
     .argument('<slice>', `create slice with name: \<any-kebab-case-string\>`)
     .option(
-        '-p --project-alias [PROJECT_ALIAS]',
+        '-pa --project-alias [PROJECT_ALIAS]',
         'project where the files will be created',
         fsd2Config.defaultProjectAlias
     )
@@ -51,11 +61,11 @@ program
             setIndexExtension(ext);
 
             const { path, uiPreset } = project;
-            const createdLayer = createLayer(path, layer);
-            const createdSlice = createSlice(createdLayer, slice);
+            const createdLayerPath = createLayer(path, layer);
+            const createdSlicePath = createSlice(createdLayerPath, slice);
 
-            segments && createSegments(createdSlice, segments);
-            uiPreset && updateUiSegment(createdSlice, uiPreset);
+            segments && createSegments(createdSlicePath, segments);
+            uiPreset && updateUiSegment(createdSlicePath, uiPreset);
         } else console.error(`Project with alias "${alias}" not found.`);
     });
 

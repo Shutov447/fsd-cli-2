@@ -1,5 +1,6 @@
 import { readdirSync, writeFileSync } from 'fs';
 import { join } from 'path';
+import { segments } from './standard';
 
 export const updateIndexExport = (
     pathWithIndex: string,
@@ -17,10 +18,16 @@ export const updateIndexExport = (
                 ? !exceptionStrings.find((ext) => file.includes(ext))
                 : true
         )
-        .map((file) => file.substring(0, file.lastIndexOf('.')))
+        .map((file) =>
+            segments.includes(file)
+                ? file
+                : file.substring(0, file.lastIndexOf('.'))
+        )
         .map((file) => `export * from './${file}';\n`)
         .reduce((acc, file) => acc + file);
 
+    console.log('filesForExport', filesForExport);
+    console.log('content', content);
     if (!index) {
         console.error('No index file found in the dir:', pathWithIndex);
         return;

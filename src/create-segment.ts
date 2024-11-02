@@ -28,9 +28,16 @@ export const createSegment = (
     return createdPath;
 };
 
-export const createSegments = (pathSlice: string, segments: string[]) => {
+export const createSegments = (
+    pathSlice: string,
+    segments: string[]
+): string[] => {
+    const createdSegments: string[] = [];
+
     (segments as string[]).forEach((segment) => {
-        createSegment(pathSlice, segment);
+        createdSegments.push(createSegment(pathSlice, segment));
     });
     updateIndexExport(pathSlice);
+
+    return createdSegments;
 };

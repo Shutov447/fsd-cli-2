@@ -30,10 +30,6 @@ export const fsd2Config: IFSD2 = JSON.parse(
 );
 export const standardLayers: readonly ILayer[] = [
     {
-        name: 'app',
-        aliases: [],
-    },
-    {
         name: 'pages',
         aliases: ['p'],
     },
@@ -49,19 +45,10 @@ export const standardLayers: readonly ILayer[] = [
         name: 'entities',
         aliases: ['e'],
     },
-    {
-        name: 'shared',
-        aliases: ['sh'],
-    },
 ];
-// export const standardLayers: readonly string[] = [
-//     'app', // TODO: сделать исключение, что там могут быть только core и конфиг папки (в fsd-cli2.config.json можно указать кастомные папки)
-//     'pages',
-//     'widgets',
-//     'features',
-//     'entities',
-//     'shared', // TODO:  сделать исключение, что там могут быть только сегменты
-// ];
+// const appLayer = ['app'];
+// const sharedLayer = ['shared', 'sh'];
+
 export const standardSegments: readonly string[] = ['ui', 'api', 'lib'];
 
 export const layers: readonly ILayer[] = [
