@@ -1,34 +1,28 @@
 import { Command } from 'commander';
-import { setIndexExtension } from '../index/create-index';
+import { createIndex, setIndexExtension } from '../index/create-index';
 import { createLayer } from '../layer/create-layer';
 import {
     sharedSegmentsForDescription,
-    angularEntitiesForDescription,
     fsd2Config,
     indexExtensionsForDescription,
-    indexExtensions,
-    allNgEntities,
-    ngComponentEntity,
+    presets,
 } from '../standard';
-import { createSlice } from '../slice/create-slice';
-import { generateAngularComponent } from '../segment/ui-preset/angular';
+import { generateAngularComponent } from '../segment/preset/ui/angular';
+import { createSegment } from '../segment/create-segment';
+import { join } from 'path';
+import { existsSync, mkdirSync } from 'fs';
+import { updateIndexExport } from '../index/update-index-export';
+import { findProjectByAlias } from '../utils/find-project';
 
-export const sharedCommand = (program: Command) => {
-    program
+export const sharedCommand = (program: Command): Command => {
+    return program
         .command('shared')
         .alias('sh')
         .argument(
             '<SEGMENT>',
             `create segment: ${sharedSegmentsForDescription}`
         )
-        .argument(
-            '<ANGULAR-ENTITY>',
-            `angular entity: ${angularEntitiesForDescription}`
-        )
-        .argument(
-            '<ANGULAR-ENTITY-NAME>',
-            'angular entity name: <any-kebab-case-string>'
-        )
+        .argument('<ENTITY-NAME>', 'entity name: <any-string>')
         .option(
             '-pa --project-alias [PROJECT_ALIAS]',
             'project where the files will be created',
@@ -36,55 +30,65 @@ export const sharedCommand = (program: Command) => {
         )
         .option(
             '-ext --extension [EXTENSION]',
-            `extension of index file: ${indexExtensionsForDescription}`
+            `extension of index file: ${indexExtensionsForDescription}`,
+            findProjectByAlias(fsd2Config.defaultProjectAlias)?.extension
         )
-        .action((segment, ngEntity, ngEntityName, options) => {
-            // INFO: есть специальные сегменты для shared - sharedSegments
-            const project = fsd2Config.projects.find(
-                (p) => p.alias === options.projectAlias
-            );
-
+        .action((segment, entityName, options) => {
+            const { projectAlias, extension } = options;
+            const project = findProjectByAlias(projectAlias);
+            console.log(options);
             if (project) {
-                const { path, uiPreset } = project;
-                const ext =
-                    options.extension &&
-                    indexExtensions.includes(options.extension)
-                        ? options.extension
-                        : project.extension;
-                const allowEntity = allNgEntities.find(
-                    (entity) => entity === ngEntity
+                setIndexExtension(extension, project.extension);
+
+                const { path, preset } = project;
+                const createdLayerPath = createLayer(path, 'shared');
+
+                const createdSegmentPath = createSegment(
+                    createdLayerPath!,
+                    segment,
+                    true,
+                    true
                 );
+                createSharedEntity(createdSegmentPath, entityName);
 
-                if (!allowEntity) {
-                    console.error(
-                        `Error: wrong angular command: ${ngEntity}. Use one of them: ${allNgEntities}`
-                    );
-                    return;
-                }
-
-                const isAngularComponent =
-                    segment === 'ui' &&
-                    uiPreset === 'angular' &&
-                    allowEntity &&
-                    ngComponentEntity.includes(allowEntity);
-
-                if (isAngularComponent) {
-                    setIndexExtension(ext);
-                    const createdLayerPath = createLayer(path, 'shared');
-                    const createdSegmentPath = createSlice(
-                        createdLayerPath,
-                        segment
-                    );
-                    generateAngularComponent(
-                        ngEntityName,
-                        createdSegmentPath,
-                        false
-                    );
-                } else {
-                    console.error(
-                        `Error: Components in the shared layer can only be created in ui, but there was an attempt to create a ${ngEntityName} component in the ${segment} segment.`
-                    );
+                switch (preset) {
+                    case 'angular':
+                        switch (segment) {
+                            case 'ui':
+                                generateAngularComponent(
+                                    entityName,
+                                    createdSegmentPath,
+                                    false
+                                );
+                                break;
+                        }
+                        break;
+                    default:
+                        console.error(
+                            `Error: wrong ui preset: ${preset}. Use one of them: ${presets}`
+                        );
+                        break;
                 }
             }
         });
+};
+
+const createSharedEntity = (
+    pathToSegment: string,
+    entityName: string,
+    withIndex = true
+) => {
+    const createdPath = join(pathToSegment, entityName);
+
+    try {
+        if (!existsSync(createdPath)) {
+            mkdirSync(createdPath);
+            withIndex && createIndex(createdPath);
+            updateIndexExport(pathToSegment, undefined, true);
+        }
+    } catch (err) {
+        console.error(`Error creating shared entity: ${err}`);
+    }
+
+    return createdPath;
 };

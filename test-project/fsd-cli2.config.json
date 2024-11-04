@@ -2,10 +2,10 @@
     "defaultProjectAlias": "tp",
     "projects": [
         {
-            "path": "test-project/src",
+            "path": "src",
             "alias": "tp",
             "extension": "ts",
-            "uiPreset": "angular"
+            "preset": "angular"
         },
         {
             "path": "some/new-project",

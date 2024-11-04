@@ -1,23 +1,27 @@
 import { existsSync, mkdirSync } from 'fs';
 import { join } from 'path';
 import { createIndex } from '../index/create-index';
-import { segments } from '../standard';
+import { segments, sharedSegments } from '../standard';
 import { updateIndexExport } from '../index/update-index-export';
 
 export const createSegment = (
     pathToSlice: string,
     segmentName: string,
-    withIndex = true
+    withIndex = true,
+    isSharedLayer = false
 ): string => {
     const createdPath = join(pathToSlice, segmentName);
 
     try {
-        if (!segments.includes(segmentName))
+        if (!isSharedLayer && !segments.includes(segmentName))
             throw new Error(
                 `Segment ${segmentName} is not allowed. Use one of them: ${segments}`
             );
-
-        if (!existsSync(createdPath)) {
+        else if (isSharedLayer && !sharedSegments.includes(segmentName))
+            throw new Error(
+                `Segment in ${segmentName} shared layer is not allowed. Use one of them: ${sharedSegments}`
+            );
+        else if (!existsSync(createdPath)) {
             mkdirSync(createdPath);
             withIndex && createIndex(createdPath);
         }

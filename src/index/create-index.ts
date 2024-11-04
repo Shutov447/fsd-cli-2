@@ -8,8 +8,8 @@ import {
 let globalExtension: Extension = 'ts';
 let globalContent = "export * from './';";
 
-export const setIndexExtension = (ext: Extension) => {
-    globalExtension = ext;
+export const setIndexExtension = (ext: Extension, ProjectExt: Extension) => {
+    globalExtension = indexExtensions.includes(ext) ? ext : ProjectExt;
 };
 export const setIndexContent = (content: string) => {
     globalContent = content;

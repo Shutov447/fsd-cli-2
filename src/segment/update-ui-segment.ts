@@ -1,11 +1,11 @@
-import { UiPreset } from '../standard';
+import { Preset } from '../standard';
 import { join } from 'path';
 import { readdirSync } from 'fs';
-import { generateAngularComponent } from './ui-preset/angular';
+import { generateAngularComponent } from './preset/ui/angular';
 
 export const updateUiSegment = (
     pathWithUi: string,
-    uiPreset: UiPreset,
+    preset: Preset,
     withComponentName?: string
 ): string | null => {
     const files = readdirSync(pathWithUi);
@@ -13,7 +13,7 @@ export const updateUiSegment = (
     const componentName = withComponentName || pathWithUi.split('\\').at(-1);
     const componentPath = ui ? join(pathWithUi, ui).replace(/\\/g, '/') : null;
 
-    switch (uiPreset) {
+    switch (preset) {
         case 'angular': {
             if (componentPath && componentName)
                 generateAngularComponent(

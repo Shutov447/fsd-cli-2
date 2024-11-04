@@ -9,16 +9,16 @@ import {
     fsd2Config,
     indexExtensionsForDescription,
     segments,
-    indexExtensions,
 } from '../standard';
+import { findProjectByAlias } from '../utils/find-project';
 
-export const defaultCommand = (program: Command) => {
+export const defaultCommand = (program: Command): Command => {
+    // INFO: пришлось сделать команду layer/l для дефолтной программы, так как sharedProgram не хочет читать options(то конфликты, то просто не видит их)
     return program
+        .command('layer')
+        .alias('l')
         .argument('<layer>', `create layer with name: ${layersForDescription}`)
-        .argument(
-            '<slice>',
-            `create slice with name: \<any-kebab-case-string\>`
-        )
+        .argument('<slice>', `create slice with name: \<any-string\>`)
         .option(
             '-pa --project-alias [PROJECT_ALIAS]',
             'project where the files will be created',
@@ -26,31 +26,40 @@ export const defaultCommand = (program: Command) => {
         )
         .option(
             '-ext --extension [EXTENSION]',
-            `extension of index file: ${indexExtensionsForDescription}`
+            `extension of index file: ${indexExtensionsForDescription}`,
+            findProjectByAlias(fsd2Config.defaultProjectAlias)?.extension
         )
         .option(
             '-s --segments [SEGMENTS...]',
             `create segments with names: ${segments}`
         )
         .action((layer, slice, options) => {
-            const alias = options.projectAlias;
-            const project = fsd2Config.projects.find((p) => p.alias === alias);
+            console.log(options);
+
+            const { projectAlias, extension, segments } = options;
+            const project = findProjectByAlias(projectAlias);
 
             if (project) {
-                const segments = options.segments;
-                const ext =
-                    options.extension &&
-                    indexExtensions.includes(options.extension)
-                        ? options.extension
-                        : project.extension;
-                setIndexExtension(ext);
+                setIndexExtension(extension, project.extension);
 
-                const { path, uiPreset } = project;
+                const { path, preset } = project;
                 const createdLayerPath = createLayer(path, layer);
-                const createdSlicePath = createSlice(createdLayerPath, slice);
 
-                segments && createSegments(createdSlicePath, segments);
-                uiPreset && updateUiSegment(createdSlicePath, uiPreset);
-            } else console.error(`Project with alias "${alias}" not found.`);
+                if (createdLayerPath) {
+                    const createdSlicePath = createSlice(
+                        createdLayerPath,
+                        slice
+                    );
+
+                    segments && createSegments(createdSlicePath, segments);
+                    preset && updateUiSegment(createdSlicePath, preset);
+                } else
+                    console.error(
+                        `Error(default command): creating layer ${createdLayerPath}. Allow: ${layersForDescription}`
+                    );
+            } else
+                console.error(
+                    `Project with alias "${projectAlias}" not found.`
+                );
         });
 };

@@ -6,14 +6,14 @@ export interface ILayer {
     aliases: string[];
 }
 export interface AngularEntity extends ILayer {}
-export type UiPreset = 'angular' | 'react' | 'vue'; // INFO: Only Angular support yet
+export type Preset = 'angular' | 'react' | 'vue'; // INFO: Only Angular support yet
 export interface IFSD2 {
     defaultProjectAlias: string;
     projects: readonly {
         path: string;
         alias: string;
         extension: Extension;
-        uiPreset?: UiPreset;
+        preset?: Preset;
     }[];
     customLayers?: readonly ILayer[];
     customSegments?: readonly string[];
@@ -24,6 +24,7 @@ export const ngComponentEntity = ['component', 'c'];
 export const allNgEntities = [...ngComponentEntity];
 
 export const indexExtensions: readonly Extension[] = ['ts', 'js'];
+export const presets: readonly Preset[] = ['angular', 'react', 'vue'];
 export const fsd2ConfigFileName = 'fsd-cli2.config.json';
 export const fsd2Config: IFSD2 = JSON.parse(
     readFileSync(fsd2ConfigFileName).toString()
@@ -67,7 +68,7 @@ export const segments: readonly string[] = [
 ];
 export const sharedSegments = [
     ...segments,
-    ...(fsd2Config?.customSegments || []),
+    ...(fsd2Config?.customSharedSegments || []),
 ];
 
 export const layersForDescription = layers.reduce(

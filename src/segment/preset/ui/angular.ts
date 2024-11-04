@@ -1,7 +1,9 @@
 import { exec } from 'child_process';
 import { join } from 'path';
-import { createIndex } from '../../index/create-index';
-import { updateIndexExport } from '../../index/update-index-export';
+import { createIndex } from '../../../index/create-index';
+import { updateIndexExport } from '../../../index/update-index-export';
+
+const exceptionStrings = ['.css', '.html', '.spec'];
 
 export const generateAngularComponent = (
     component: string,
@@ -17,20 +19,12 @@ export const generateAngularComponent = (
             else if (stderr) console.error(`Error: ${stderr}`);
             else {
                 if (isFlat) {
-                    updateIndexExport(componentPath, [
-                        '.css',
-                        '.html',
-                        '.spec',
-                    ]);
+                    updateIndexExport(componentPath, exceptionStrings);
                     console.log(stdout);
                 } else {
                     const pathToComponent = join(componentPath, component);
                     createIndex(pathToComponent);
-                    updateIndexExport(pathToComponent, [
-                        '.css',
-                        '.html',
-                        '.spec',
-                    ]);
+                    updateIndexExport(pathToComponent, exceptionStrings);
                     updateIndexExport(componentPath, undefined, true);
                     console.log(stdout);
                 }

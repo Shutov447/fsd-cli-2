@@ -7,12 +7,12 @@ export const createLayer = (
     pathToProject: string,
     layerName: string,
     withIndex = false
-): string => {
+): string | undefined => {
+    let createdPath;
     const newLayerName = layers.find(
         (layer) => layer.name === layerName || layer.aliases.includes(layerName)
     );
     const formattedLayerName = newLayerName?.name;
-    let createdPath = '';
 
     try {
         if (!newLayerName)
