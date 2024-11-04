@@ -7,7 +7,7 @@ import { sharedCommand } from './command/shared';
 
 const program = new Command();
 
-program.name('fsd2').version('1.2.0').description('fsd files creator.');
+program.name('fsd2').version('1.2.1').description('fsd files creator.');
 
 // TODO: наверное займусь этим когда из армии вернусь(0(
 // INFO: https://www.npmjs.com/package/commander/v/5.1.0
